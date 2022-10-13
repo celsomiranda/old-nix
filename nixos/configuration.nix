@@ -90,7 +90,6 @@
     playerctl
     # SWAY
     sway
-    configure-gtk
     swaylock
     swayidle
     wl-clipboard
