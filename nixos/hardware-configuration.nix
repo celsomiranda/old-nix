@@ -5,7 +5,8 @@
 
 {
   imports =
-    [ (modulesPath + "/installer/scan/not-detected.nix")
+    [
+      (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
@@ -14,18 +15,21 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "none";
+    {
+      device = "none";
       fsType = "tmpfs";
       options = [ "defaults" "size=4G" "mode=755" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/EF06-5884";
+    {
+      device = "/dev/disk/by-uuid/EF06-5884";
       fsType = "vfat";
     };
 
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/4ba77753-a4bc-46e1-8290-c83b5ac2e8bd";
+    {
+      device = "/dev/disk/by-uuid/4ba77753-a4bc-46e1-8290-c83b5ac2e8bd";
       fsType = "btrfs";
       options = [ "subvol=nix" "compress=zstd" "noatime" "ssd" "space_cache=v2" ];
     };
@@ -33,21 +37,25 @@
   boot.initrd.luks.devices."nixrootencrypted".device = "/dev/disk/by-uuid/87165d4d-0390-47ad-9de2-7434dcccd17f";
 
   fileSystems."/nix/persist" =
-    { device = "/dev/disk/by-uuid/4ba77753-a4bc-46e1-8290-c83b5ac2e8bd";
+    {
+      device = "/dev/disk/by-uuid/4ba77753-a4bc-46e1-8290-c83b5ac2e8bd";
       fsType = "btrfs";
       options = [ "subvol=persist" "compress=zstd" "noatime" "ssd" "space_cache=v2" ];
     };
 
   fileSystems."/etc/nixos" =
-    { device = "/nix/persist/etc/nixos";
+    {
+      device = "/nix/persist/etc/nixos";
       fsType = "none";
       options = [ "bind" ];
     };
 
   fileSystems."/var/log" =
-    { device = "/nix/persist/var/log";
+    {
+      device = "/nix/persist/var/log";
       fsType = "none";
       options = [ "bind" ];
+      neededForBoot = true;
     };
 
   swapDevices = [ ];

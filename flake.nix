@@ -31,7 +31,7 @@
     );
 
     nixosConfigurations = {
-      omen = nixpkgs.lib.nixosSystem {
+      iscte = nixpkgs.lib.nixosSystem {
         pkgs = legacyPackages.x86_64-linux;
         specialArgs = { inherit inputs; }; # Pass flake inputs to our config
         # > Our main nixos configuration file <
@@ -40,7 +40,7 @@
     };
 
     homeConfigurations = {
-      "celso@omen" = home-manager.lib.homeManagerConfiguration {
+      "celso@iscte" = home-manager.lib.homeManagerConfiguration {
         pkgs = legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         # > Our main home-manager configuration file <
