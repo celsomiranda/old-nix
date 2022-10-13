@@ -9,6 +9,9 @@
     inputs.hardware.nixosModules.common-gpu-intel
     inputs.hardware.nixosModules.common-pc-ssd
 
+    # Impermanence
+    inputs.impermanence.nixosModules.impermanence
+
     # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
   ];
