@@ -1,5 +1,5 @@
 {
-  description = "You new nix config";
+  description = "Celso Miranda's personal nix config";
 
   inputs = {
     # Nixpkgs
@@ -19,7 +19,7 @@
     # This instantiates nixpkgs for each system listed
     # Allowing you to configure it (e.g. allowUnfree)
     # Our configurations will use these instances
-    legacyPackages = nixpkgs.lib.genAttrs [ "x86_64-linux" "x86_64-darwin" ] (system:
+    legacyPackages = nixpkgs.lib.genAttrs [ "x86_64-linux" ] (system:
       import inputs.nixpkgs {
         inherit system;
 
