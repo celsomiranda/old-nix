@@ -32,7 +32,7 @@
     };
   };
 
-  # FIXME: Add the rest of your current configuration
+
 
   # Set your hostname
   networking.hostName = "iscte";
@@ -79,7 +79,98 @@
     ];
   };
 
-  security.sudo.execWheelOnly = true;
+  environment.systemPackages = with pkgs; [
+    wget
+    htop
+    pavucontrol
+    pamixer
+    playerctl
+    # SWAY
+    sway
+    configure-gtk
+    swaylock
+    swayidle
+    wl-clipboard
+    mako
+    wofi
+    dbus-sway-environment
+    wayland
+
+    kitty
+    firefox
+
+  ];
+
+  fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-emoji
+    liberation_ttf
+    (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+
+  ];
+
+  # AUDIO PIPEWIRE
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
+  time.timeZone = "Europe/Lisbon";
+  console = {
+    keyMap = "pt-latin9";
+    font = "lat9w-16";
+  };
+
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    extraLocaleSettings = {
+      LC_ADDRESS = "pt_PT.utf8";
+      LC_IDENTIFICATION = "pt_PT.utf8";
+      LC_MEASUREMENT = "pt_PT.utf8";
+      LC_MONETARY = "pt_PT.utf8";
+      LC_NAME = "pt_PT.utf8";
+      LC_NUMERIC = "pt_PT.utf8";
+      LC_PAPER = "pt_PT.utf8";
+      LC_TELEPHONE = "pt_PT.utf8";
+      LC_TIME = "pt_PT.utf8";
+    };
+  };
+
+  services.dbus.enable = true;
+  xdg = {
+    portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+    };
+  };
+
+  security = {
+    # Only allow sudo execution by the Wheel Group
+    sudo.execWheelOnly = true;
+    # Allow swaylock to unlock de computer
+    pam.services.swaylock = {
+      text = "auth include login";
+    };
+  };
+
+  networking = {
+    firewall = {
+      enable = true;
+      checkReversePath = "loose";
+      #allowedTCPPorts = [ ];
+      allowedUDPPorts = [
+        41641 # tailscale
+      ];
+    };
+    networkmanager.enable = true;
+  };
+
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "22.11";

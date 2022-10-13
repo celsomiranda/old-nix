@@ -41,6 +41,7 @@
       device = "/dev/disk/by-uuid/4ba77753-a4bc-46e1-8290-c83b5ac2e8bd";
       fsType = "btrfs";
       options = [ "subvol=persist" "compress=zstd" "noatime" "ssd" "space_cache=v2" ];
+      neededForBoot = true;
     };
 
   fileSystems."/etc/nixos" =
@@ -69,4 +70,7 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  nixpkgs.hostPlatform = "x86_64-linux";
+
 }

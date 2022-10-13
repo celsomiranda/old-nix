@@ -5,18 +5,63 @@
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors), use something like:
     # inputs.nix-colors.homeManagerModule
-
+    inputs.impermanence.homeManagerModule
     # Feel free to split up your configuration and import pieces of it here.
   ];
 
-  # TODO: Set your username
   home = {
     username = "celso";
     homeDirectory = "/home/celso";
   };
 
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = false;
+    desktop = "desktop";
+    documents = "docs";
+    download = "downloads";
+    music = "music";
+    pictures = "pictures";
+    videos = "videos";
+    publicShare = "pub";
+    templates = "templates";
+  };
+
+
+  home.persistence."/nix/persist/home/celso" = {
+    allowOther = true;
+    directories = [
+      "docs"
+      "downloads"
+      "pictures"
+      "videos"
+      "music"
+      "pub"
+      "templates"
+      ".ssh"
+      ".mozilla"
+      ".config/nvim"
+      ".config/sway"
+      ".config/wofi"
+    ];
+    files = [
+      ".bash_history"
+    ];
+  };
+
+
+
   # Add stuff for your user as you see fit:
-  home.packages = with pkgs; [ rnix-lsp sumneko-lua-language-server nixpkgs-fmt bat exa ripgrep fzf fd ];
+  home.packages = with pkgs; [
+    rnix-lsp
+    sumneko-lua-language-server
+    nixpkgs-fmt
+    bat
+    exa
+    ripgrep
+    fzf
+    fd
+  ];
 
   # Enable home-manager
   programs.home-manager.enable = true;
@@ -415,6 +460,25 @@
 
     ];
   };
+
+  # Sway
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+
+    extraSessionCommands = ''
+      export SDL_VIDEODRIVER=wayland
+      export QT_QPA_PLATFORM=wayland
+      export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      export MOZ_ENABLE_WAYLAND=1
+    '';
+  };
+  programs.waybar.enable = true;
+  programs.fuse.userAllowOther = true;
+  programs.light.enable = true;
+
+
 
 
   # Nicely reload system units when changing configs
