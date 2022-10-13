@@ -95,7 +95,6 @@
     wl-clipboard
     mako
     wofi
-    dbus-sway-environment
     wayland
 
     kitty
@@ -108,8 +107,25 @@
     noto-fonts-emoji
     liberation_ttf
     (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-
   ];
+
+  # Sway
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+
+    extraSessionCommands = ''
+      export SDL_VIDEODRIVER=wayland
+      export QT_QPA_PLATFORM=wayland
+      export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      export MOZ_ENABLE_WAYLAND=1
+    '';
+  };
+  programs.waybar.enable = true;
+  programs.fuse.userAllowOther = true;
+  programs.light.enable = true;
+
 
   # AUDIO PIPEWIRE
   security.rtkit.enable = true;

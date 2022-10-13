@@ -3,10 +3,7 @@
 
 { inputs, lib, config, pkgs, ... }: {
   imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors), use something like:
-    # inputs.nix-colors.homeManagerModule
-    inputs.impermanence.homeManagerModule
-    # Feel free to split up your configuration and import pieces of it here.
+    inputs.impermanence.nixosModules.home-manager.impermanence
   ];
 
   home = {
@@ -460,26 +457,6 @@
 
     ];
   };
-
-  # Sway
-  programs.sway = {
-    enable = true;
-    wrapperFeatures.gtk = true;
-
-    extraSessionCommands = ''
-      export SDL_VIDEODRIVER=wayland
-      export QT_QPA_PLATFORM=wayland
-      export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
-      export _JAVA_AWT_WM_NONREPARENTING=1
-      export MOZ_ENABLE_WAYLAND=1
-    '';
-  };
-  programs.waybar.enable = true;
-  programs.fuse.userAllowOther = true;
-  programs.light.enable = true;
-
-
-
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
