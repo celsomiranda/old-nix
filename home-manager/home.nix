@@ -1,7 +1,7 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
 
-{ inputs, lib, config, pkgs, ... }: {
+{ inputs, lib, config, pkgs, outputs, ... }: {
   imports = [
     inputs.impermanence.nixosModules.home-manager.impermanence
   ];
@@ -14,33 +14,30 @@
   xdg.userDirs = {
     enable = true;
     createDirectories = false;
-    desktop = "desktop";
-    documents = "docs";
-    download = "downloads";
-    music = "music";
-    pictures = "pictures";
-    videos = "videos";
-    publicShare = "pub";
-    templates = "templates";
+    documents = "Documents";
+    download = "Downloads";
+    music = "Music";
+    pictures = "Pictures";
+    videos = "Videos";
   };
 
 
   home.persistence."/nix/persist/home/celso" = {
     allowOther = true;
     directories = [
-      "docs"
-      "downloads"
-      "pictures"
-      "videos"
-      "music"
-      "pub"
-      "templates"
+      "Documents"
+      "Downloads"
+      "Pictures"
+      "Videos"
+      "Music"
       ".ssh"
       ".mozilla"
+      ".config/BraveSoftware"
       ".config/sway"
       ".config/waybar"
       ".config/syncthing"
       ".config/rofi"
+      ".config/keepassxc"
     ];
     files = [
     ];
@@ -49,6 +46,7 @@
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
     keepassxc
+    brave
     rnix-lsp
     sumneko-lua-language-server
     nixpkgs-fmt
@@ -80,7 +78,6 @@
       };
     };
     ignores = [ ".DS_Store" "*.pyc" ];
-
   };
 
   # GITHUB
@@ -125,10 +122,10 @@
       gp = "git pull";
 
       mkdir = "mkdir -p";
-      syscfg = "nvim ~/downloads/nix-config/nixos/configuration.nix";
-      sysup = "sudo nixos-rebuild switch --flake ~/downloads/nix-config/.#iscte";
-      homecfg = "nvim ~/downloads/nix-config/home-manager/home.nix";
-      homeup = "home-manager switch --flake ~/downloads/nix-config/.#celso@iscte";
+      syscfg = "nvim ~/Downloads/nix-config/nixos/configuration.nix";
+      sysup = "sudo nixos-rebuild switch --flake ~/Downloads/nix-config/.#iscte";
+      homecfg = "nvim ~/Downloads/nix-config/home-manager/home.nix";
+      homeup = "home-manager switch --flake ~/Downloads/nix-config/.#celso@iscte";
       upd = "nix-channel --update && homeup";
     };
 
