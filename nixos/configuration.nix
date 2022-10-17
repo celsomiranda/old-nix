@@ -54,11 +54,10 @@
       isNormalUser = true;
       #openssh.authorizedKeys.keys = [];
       extraGroups = [ "wheel" "video" "camera" "audio" "networkmanager" ];
+      shell = pkgs.fish;
     };
   };
 
-  # Tailscale is essential
-  services.tailscale.enable = true;
 
   # This setups a SSH server. Very important if you're setting up a headless system.
   # Feel free to remove if you don't need it.
@@ -83,6 +82,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    jq
     wget
     htop
     pavucontrol
@@ -90,13 +90,13 @@
     playerctl
     # SWAY
     sway
+    waybar
     swaylock
     swayidle
     wl-clipboard
     mako
-    wofi
+    rofi
     wayland
-
     kitty
     firefox
 
@@ -124,8 +124,7 @@
   };
   programs.waybar.enable = true;
   programs.fuse.userAllowOther = true;
-  programs.light.enable = true;
-
+  programs.zsh.enable = true;
 
   # AUDIO PIPEWIRE
   security.rtkit.enable = true;
@@ -177,16 +176,44 @@
     };
   };
 
+  # Tailscale is essential
+  services.tailscale.enable = true;
+
   networking = {
     firewall = {
       enable = true;
+      trustedInterfaces = [ "tailscale0"];
       checkReversePath = "loose";
-      #allowedTCPPorts = [ ];
-      allowedUDPPorts = [
-        41641 # tailscale
-      ];
+      allowedUDPPorts = [ config.services.tailscale.port ];
     };
     networkmanager.enable = true;
+  };
+
+  systemd.services.tailscale-autoconnect = {
+    description = "Automatic connection to Tailscale";
+
+    # make sure tailscale is running before trying to connect to tailscale
+    after = [ "network-pre.target" "tailscale.service" ];
+    wants = [ "network-pre.target" "tailscale.service" ];
+    wantedBy = [ "multi-user.target" ];
+
+    # set this service as a oneshot job
+    serviceConfig.Type = "oneshot";
+
+    # have the job run this shell script
+    script = with pkgs; ''
+      # wait for tailscaled to settle
+      sleep 2
+
+      # check if we are already authenticated to tailscale
+      status="$(${tailscale}/bin/tailscale status -json | ${jq}/bin/jq -r .BackendState)"
+      if [ $status = "Running" ]; then # if so, then do nothing
+        exit 0
+      fi
+
+      # otherwise authenticate with tailscale
+      ${tailscale}/bin/tailscale up --accept-dns --accept-routes -authkey tskey-auth-kYhHRe5CNTRL-Nc5pMUxHJJSWz9z2yUEFNSmft9N1pyiK
+    '';
   };
 
 

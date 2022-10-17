@@ -37,19 +37,18 @@
       "templates"
       ".ssh"
       ".mozilla"
-      ".config/nvim"
       ".config/sway"
-      ".config/wofi"
+      ".config/waybar"
+      ".config/syncthing"
+      ".config/rofi"
     ];
     files = [
-      ".bash_history"
     ];
   };
 
-
-
   # Add stuff for your user as you see fit:
   home.packages = with pkgs; [
+    keepassxc
     rnix-lsp
     sumneko-lua-language-server
     nixpkgs-fmt
@@ -60,8 +59,12 @@
     fd
   ];
 
+
   # Enable home-manager
   programs.home-manager.enable = true;
+
+  services.syncthing.enable = true;
+
 
   # GIT
   programs.git = {
@@ -108,6 +111,11 @@
       { name = "autopair-fish"; src = pkgs.fishPlugins.autopair-fish.src; }
       { name = "bass"; src = pkgs.fishPlugins.bass.src; }
     ];
+    shellInit = ''
+      if test -z $DISPLAY; and test (tty) = "/dev/tty1"
+      sway
+      end
+    '';
     shellAliases = {
       cat = "bat";
       ls = "exa -la";
@@ -117,8 +125,10 @@
       gp = "git pull";
 
       mkdir = "mkdir -p";
-      homecfg = "nvim ~/GitHub/wsl-nix-home/home.nix";
-      homeup = "home-manager -f ~/GitHub/wsl-nix-home/home.nix switch";
+      syscfg = "nvim ~/downloads/nix-config/nixos/configuration.nix";
+      sysup = "sudo nixos-rebuild switch --flake ~/downloads/nix-config/.#iscte";
+      homecfg = "nvim ~/downloads/nix-config/home-manager/home.nix";
+      homeup = "home-manager switch --flake ~/downloads/nix-config/.#celso@iscte";
       upd = "nix-channel --update && homeup";
     };
 
@@ -127,9 +137,6 @@
       g = "git";
     };
 
-    shellInit = ''
-      . /home/celso/.nix-profile/etc/profile.d/nix.fish
-    '';
     functions = {
       fish_greeting = {
         body = "";
@@ -215,52 +222,46 @@
     vimAlias = true;
     vimdiffAlias = true;
     extraConfig = ''
-      local opt = vim.opt
-      local g = vim.g
-
-      g.mapleader = ' '
+      vim.g.mapleader = ' '
 
       -- Undo files
-      opt.undofile = true
-      opt.undodir = os.getenv("HOME")..'/.cache/nvim'
+      vim.opt.undofile = true
+      vim.opt.undodir = os.getenv("HOME")..'/.cache/nvim'
 
       -- Indentation
-      opt.smartindent = true
-      opt.autoindent = true
-      opt.tabstop = 4
-      opt.shiftwidth = 4
-      opt.expandtab = true
+      vim.opt.smartindent = true
+      vim.opt.autoindent = true
+      vim.opt.tabstop = 4
+      vim.opt.shiftwidth = 4
+      vim.opt.expandtab = true
 
       -- System Clipboard
-      opt.clipboard = "unnamedplus"
+      vim.opt.clipboard = "unnamedplus"
 
       -- Mouse Support
-      opt.mouse = "a"
+      vim.opt.mouse = "a"
 
       -- Nice UI
-      opt.termguicolors = true
-      opt.cursorline = true
-      opt.number = true
-      opt.relativenumber = true
+      vim.opt.termguicolors = true
+      vim.opt.cursorline = true
+      vim.opt.number = true
+      vim.opt.relativenumber = true
 
       -- Colorscheme
-      --require('nord').set()
-      --g.nord_contrast = true
-      --
       vim.cmd("colorscheme nightfox")
 
       -- Annoying VimInfo
-      opt.viminfo = ""
-      opt.viminfofile = "NONE"
+      vim.opt.viminfo = ""
+      vim.opt.viminfofile = "NONE"
 
       -- Quality of Life
-      opt.smartcase = true
-      opt.ttimeoutlen = 5
-      opt.compatible = false
-      opt.autoread = true
-      opt.incsearch = true
-      opt.hidden = true
-      opt.shortmess = "atI"
+      vim.opt.smartcase = true
+      vim.opt.ttimeoutlen = 5
+      vim.opt.compatible = false
+      vim.opt.autoread = true
+      vim.opt.incsearch = true
+      vim.opt.hidden = true
+      vim.opt.shortmess = "atI"
 
       luafile /home/celso/.config/nvim/lua/treesitter.lua
     '';
@@ -271,7 +272,6 @@
       {
         plugin = nvim-tree-lua;
         config = ''
-          lua << EOF
           vim.g.loaded = 1
           vim.g.loaded_netrwPlugin = 1
           require("nvim-tree").setup{}
@@ -281,7 +281,6 @@
           map('n', '<leader>t', [[:NvimTreeToggle<CR>]], {})            -- open/close
           map('n', '<leader>f', [[:NvimTreeRefresh<CR>]], {})       -- refresh
           map('n', '<leader>n', [[:NvimTreeFindFile<CR>]], {})      -- search file
-          EOF
         '';
       }
 
@@ -289,66 +288,6 @@
       {
         plugin = nvim-lspconfig;
         config = ''
-          lua < < EOF
-            vim.defer_fn
-            (function
-              ()
-                require'lspconfig'.rnix.setup
-                { }
-                require'lspconfig'.sumneko_lua.setup
-                { }
-
-                vim.o.completeopt = "menuone,noselect"
-
-              require'compe'.setup
-              {
-                enabled = true;
-                autocomplete = true;
-                debug = false;
-                min_lenght = 1;
-                preselect = 'enable';
-                throttle_time = 80;
-                source_timeout = 200;
-                incomplete_delay = 200;
-                max_abbr_width = 100;
-                max_kind_width = 100;
-                max_menu_width = 100;
-                documentation = false;
-                souce = {
-                  path = true;
-                  buffer = true;
-                  nvim_lsp = true;
-                  nvim_lua = true;
-                  treesitter = true;
-                };
-              }
-
-            - - Set Tab
-              local
-              t =
-            function
-            (str)
-            return
-            vim.api.nvim_replace_termcodes
-            (str,
-            true, true, true)
-          end
-          _G.tab_complete = function()
-          if vim.fn.pumvisible() == 1 then
-          return t "<C-n>"
-          else
-          return t "<S-Tab>"
-          end
-          end
-
-          vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-          vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-
-
-
-          end, 70)
-          EOF
-
         '';
       }
       nvim-lspconfig
@@ -361,19 +300,16 @@
       {
         plugin = tokyonight-nvim;
         config = ''
-          lua << EOF
           require("tokyonight").setup({
             style = "night",
           })
           vim.cmd[[colorscheme tokyonight]]
-          EOF
         '';
       }
       indentLine
       {
         plugin = barbar-nvim;
         config = ''
-          lua << EOF
           local map = vim.api.nvim_set_keymap
           local opts = { noremap = true, silent = true }
 
@@ -413,19 +349,16 @@
           map('n', '<Space>bd', '<Cmd>BufferOrderByDirectory<CR>', opts)
           map('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<CR>', opts)
           map('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<CR>', opts)
-          EOF
         '';
       }
       {
         plugin = lualine-nvim;
         config = ''
-          lua << EOF
-          require('lualine').setup {
+                    require('lualine').setup {
             options = {
               theme = 'tokyonight'
             }
           }
-          EOF
         '';
       }
 
@@ -441,17 +374,13 @@
       {
         plugin = telescope-nvim;
         config = ''
-          lua << EOF
           require ("telescope").setup()
-          EOF
         '';
       }
       {
         plugin = nvim-autopairs;
         config = ''
-          lua << EOF
           require ("nvim-autopairs").setup {}
-          EOF
         '';
       }
 
