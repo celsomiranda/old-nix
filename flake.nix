@@ -1,51 +1,58 @@
 {
-  description = "Celso Miranda's personal nix config";
+  description = "Celso's config with flakesw";
 
   inputs = {
-    # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    hardware.url = "github:nixos/nixos-hardware";
-
-    # Home manager
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    # Impermance for that sweet opt-in
-    impermanence.url = "github:nix-community/impermanence";
-    nix-colors.url = "github:misterio77/nix-colors";
-  };
-
-  outputs = { nixpkgs, home-manager, ... }@inputs: rec {
-    # This instantiates nixpkgs for each system listed
-    # Allowing you to configure it (e.g. allowUnfree)
-    # Our configurations will use these instances
-    legacyPackages = nixpkgs.lib.genAttrs [ "x86_64-linux" ] (system:
-      import inputs.nixpkgs {
-        inherit system;
-
-        # NOTE: Using `nixpkgs.config` in your NixOS config won't work
-        # Instead, you should set nixpkgs configs here
-        # (https://nixos.org/manual/nixpkgs/stable/#idm140737322551056)
-        config.allowUnfree = true;
-      }
-    );
-
-    nixosConfigurations = {
-      iscte = nixpkgs.lib.nixosSystem {
-        pkgs = legacyPackages.x86_64-linux;
-        specialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        # > Our main nixos configuration file <
-        modules = [ ./nixos/configuration.nix ];
-      };
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL";
+    flake-utils.url = "github:numtide/flake-utils";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    homeConfigurations = {
-      "celso@iscte" = home-manager.lib.homeManagerConfiguration {
-        pkgs = legacyPackages.x86_64-linux;
-        extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
-        # > Our main home-manager configuration file <
-        modules = [ ./home-manager/home.nix ];
-      };
+    home-manager = {
+      url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
+
+  outputs = { self, nixpkgs, flake-utils, home-manager, ... }@inputs: 
+    let
+      system = "x86_64-linux";
+      overlays = [
+        inputs.agenix.overlay
+        self.overlay
+      ];
+      lib = nixpkgs.lib.extend (final: prev:
+        import ./lib {
+          inherit home-manager;
+          lib = final;
+        });
+    in {
+      overlay = import ./overlay.nix {
+        inherit lib home-manager;
+        inherit (inputs);
+      };
+
+      # NixOS machines
+      nixosConfigurations = lib.celso.allProfiles ./machines (name: file:
+        lib.celso.makeNixOS name file { inherit inputs system overlays; });
+
+      # Non-NixOS machines (Alpine, WSL, ++)
+      homeConfigurations = lib.celso.nixos2hm {
+        inherit (self) nixosConfigurations;
+        inherit overlays system;
+      };
+    } // flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = import nixpkgs { inherit system overlays; };
+      in {
+        # All packages under pkgs.celso.apps from the overlay
+        packages = pkgs.celso.apps;
+
+        devShells = {
+          # Default dev shell (used by direnv)
+          default = pkgs.mkShell { buildInputs = with pkgs; [ agenix ]; };
+        };
+      });
 }
+ 
+ 
