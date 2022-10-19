@@ -1,0 +1,43 @@
+{ config, lib, ... }:
+
+let
+  cfg = config.celso.machine;
+  genericLinux = cfg.flavor == "generic";
+
+in
+{
+  options.celso.machine.user = {
+    name = lib.mkOption {
+      type = lib.types.str;
+      default = "nixos";
+      description = "Machine main user name.";
+    };
+    config = lib.mkOption {
+      type = lib.types.anything;
+      default = { };
+      description = "NixOS user config.";
+    };
+    profile = lib.mkOption {
+      type = lib.types.anything;
+      default = { };
+      description = "User Home Manager profile.";
+    };
+  };
+
+  config = {
+    # Home manager
+    home-manager.useGlobalPkgs = true;
+    home-manager.useUserPackages = !genericLinux;
+
+    users.users.${cfg.user.name} = cfg.user.config;
+    home-manager.users.${cfg.user.name} = lib.mkMerge [
+      cfg.user.profile
+      {
+        config = {
+          submoduleSupport.enable = lib.mkForce (!genericLinux);
+          targets.genericLinux.enable = genericLinux;
+        };
+      }
+    ];
+  };
+}
