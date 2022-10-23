@@ -34,24 +34,11 @@
           ];
 
           home.sessionVariables = {
-            EDITOR = "et";
+            EDITOR = "nvim";
             XDG_RUNTIME_DIR = "/run/user/$(id -u)";
           };
 
-          programs = {
-            # SSH agent
-            keychain = {
-              enable = true;
-              keys = [ "id_ed25519" ];
-            };
-
-            ssh = {
-              enable = true;
-              includes = [
-                config.age.secrets.ssh.path
-              ];
-            };
-          };
+          programs = { };
 
           celso.dev = {
             docs.enable = true;
@@ -62,11 +49,6 @@
         };
       };
     };
-  };
-
-  age.secrets.ssh = {
-    file = ./../secrets/ssh.age;
-    owner = config.celso.machine.user.name;
   };
 
   documentation.nixos.enable = true;
