@@ -1,13 +1,10 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running `nixos-help`).
+{ lib, inputs, config, pkgs, ... }:
 
-{ config, pkgs, ... }:
-let
-  impermanence = builtins.fetchTarball "https://github.com/nix-community/impermanence/archive/master.tar.gz";
-in
 {
-  imports = [ "${impermanence}/nixos.nix" ./hardware-configuration.nix ];
+  imports = [
+    inputs.impermanence.nixosModules.impermanence
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -131,6 +128,7 @@ in
     gnomeExtensions.appindicator
     vim
     wget
+    git
   ];
 
   environment.shells = with pkgs; [ zsh ];
