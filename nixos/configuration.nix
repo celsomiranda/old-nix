@@ -5,8 +5,9 @@
     inputs.impermanence.nixosModules.impermanence
     ./hardware-configuration.nix
   ];
-
-  # Use the systemd-boot EFI boot loader.
+  
+  nixpkgs.config.allowUnfree = true;
+  
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -69,14 +70,18 @@
         "ISCTE" = { id = "TXYPW2C-ENARVSY-4HZEEZK-GSUQ6UM-Q6IKA6N-YHIRBBR-QLOTZ5K-F7HKGA2"; };
       };
       folders = {
-        "75nkg-4joak" = {
+        "books" = {
+          id = "75nkg-4joak";
           path = "/home/celso/Documents/books";
+          devices = [ "Home NAS" ];
         };
         "keepassxc" = {
           path = "/home/celso/Documents/keepass";
+          devices = [ "Home NAS" "Huawei Mate20 Pro" "Huawei MediaPad" "ISCTE" ];
         };
         "obsidian" = {
           path = "/home/celso/Documents/obsidian";
+          devices = [ "Home NAS" "Huawei Mate20 Pro" "Huawei MediaPad" "ISCTE" ];
         };
       };
     };
@@ -110,22 +115,26 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
-  users.defaultUserShell = pkgs.zsh;
-  users.mutableUsers = false;
-  users.users.celso = {
-     description = "Celso Miranda";
-     useDefaultShell = true;
-     isNormalUser = true;
-     group = "users";
-     extraGroups = [ "wheel" ];
-     openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNEjRa9V1RmX55DQp/kfUd4mG5W9FTLfZR/40uDUYxm omen-laptop" ];
-     passwordFile = "/persist/passwords/celso";
+  users = {
+    defaultUserShell = pkgs.zsh;
+    mutableUsers = false;
+    users.celso = {
+      description = "Celso Miranda";
+      useDefaultShell = true;
+      isNormalUser = true;
+      group = "users";
+      extraGroups = [ "wheel" "networkmanager" ];
+      openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNEjRa9V1RmX55DQp/kfUd4mG5W9FTLfZR/40uDUYxm omen-laptop" ];
+      passwordFile = "/persist/passwords/celso";
+    };
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
+    gnomeExtensions.syncthing-indicator
+    keepassxc
     vim
     wget
     git

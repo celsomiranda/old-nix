@@ -10,7 +10,7 @@
     home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    hardware.url = "github:nixos/nixos-hardware";
+    hardware.url = "github:NixOS/nixos-hardware";
     impermanence.url ="github:nix-community/impermanence";
 
     # Shameless plug: looking for a way to nixify your themes and make
@@ -25,7 +25,10 @@
       omen_nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; }; # Pass flake inputs to our config
         # > Our main nixos configuration file <
-        modules = [ ./nixos/configuration.nix ];
+        modules = [
+            hardware.nixosModules.omen-en00015p
+            ./nixos/configuration.nix
+        ];
       };
     };
 
