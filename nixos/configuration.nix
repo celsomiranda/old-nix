@@ -1,11 +1,27 @@
-{ lib, inputs, config, pkgs, ... }:
+{ lib, inputs, config, pkgs, outputs, ... }:
 
 {
   imports = [
-    inputs.impermanence.nixosModules.impermanence
     ./hardware-configuration.nix
   ];
   
+  nix = {
+    # This will add each flake input as a registry
+    # To make nix3 commands consistent with your flake
+    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+
+    # This will additionally add your inputs to the system's legacy channels
+    # Making legacy nix commands consistent as well, awesome!
+    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = "nix-command flakes";
+      # Deduplicate and optimize nix store
+      auto-optimise-store = true;
+    };
+  };
+
   nixpkgs.config.allowUnfree = true;
   
   boot.loader.systemd-boot.enable = true;
@@ -19,7 +35,13 @@
   time.timeZone = "Europe/Lisbon";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    supportedLocales = [ "pt_PT.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+    extraLocaleSettings = {
+      LC_TIME = "pt_PT.UTF-8";
+    };
+  };
   console = {
     font = "Lat2-Terminus16";
     useXkbConfig = true; # use xkbOptions in tty.
@@ -99,6 +121,12 @@
 
   programs = {
     dconf.enable = true;
+
+    firefox = {
+      enable = true;
+      languagePacks = [ "pt-PT" "en-US" ];
+    };
+
     zsh.enable = true;
   };
 
@@ -133,11 +161,16 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
-    gnomeExtensions.syncthing-indicator
+    gnomeExtensions.syncthing-icon
+    
+
     keepassxc
+    
     vim
     wget
     git
+    
+    maple-mono-NF
   ];
 
   environment.shells = with pkgs; [ zsh ];

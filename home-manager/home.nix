@@ -4,8 +4,8 @@
 { inputs, lib, config, pkgs, ... }: {
   # You can import other home-manager modules here
   imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors):
     # inputs.nix-colors.homeManagerModule
+    #inputs.impermanence.homeManagerModule
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
@@ -33,19 +33,32 @@
     };
   };
 
-  # TODO: Set your username
   home = {
-    username = "your-username";
-    homeDirectory = "/home/your-username";
+    username = "celso";
+    homeDirectory = "/home/celso";
   };
 
-  # Add stuff for your user as you see fit:
-  # programs.neovim.enable = true;
-  # home.packages = with pkgs; [ steam ];
+  programs = {
+    home-manager.enable = true;
+    neovim.enable = true;
 
-  # Enable home-manager and git
-  programs.home-manager.enable = true;
-  programs.git.enable = true;
+    git = {
+      enable = true;
+      userName = "Celso Miranda";
+      userEmail = "769237+celsomiranda@users.noreply.github.com";
+    };
+
+    zsh = {
+        enable = true;
+        enableAutosuggestions = true;
+        enableCompletion = true;
+        dotDir = ".config/zsh";
+    };
+  };
+
+  home.packages = with pkgs; [
+    nixfmt
+  ];
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";

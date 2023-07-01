@@ -20,12 +20,14 @@
 
   outputs = { nixpkgs, home-manager, hardware, impermanence, ... }@inputs: {
     # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#omen-nixos'
+    # Available through 'nixos-rebuild --Flake .#omen-nixos'
     nixosConfigurations = {
       omen_nixos = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; }; # Pass flake inputs to our config
         # > Our main nixos configuration file <
         modules = [
+            impermanence.nixosModules.impermanence
+            home-manager.nixosModules.home-manager
             hardware.nixosModules.omen-en00015p
             ./nixos/configuration.nix
         ];
@@ -33,7 +35,7 @@
     };
 
     # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#celso@omen-nixos'
+    # Available through 'home-manager --flake .#celso@omen_nixos'
     homeConfigurations = {
       "celso@omen_nixos" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
