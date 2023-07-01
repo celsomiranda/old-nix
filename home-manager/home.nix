@@ -5,7 +5,6 @@
   # You can import other home-manager modules here
   imports = [
     # inputs.nix-colors.homeManagerModule
-    #inputs.impermanence.homeManagerModule
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
@@ -39,26 +38,48 @@
   };
 
   programs = {
-    home-manager.enable = true;
-    neovim.enable = true;
+      home-manager.enable = true;
+      neovim.enable = true;
+      emacs.enable = true;
+      fzf.enable = true;
 
-    git = {
-      enable = true;
-      userName = "Celso Miranda";
-      userEmail = "769237+celsomiranda@users.noreply.github.com";
-    };
+      git = {
+          enable = true;
+          userName = "Celso Miranda";
+          userEmail = "769237+celsomiranda@users.noreply.github.com";
+      };
 
-    zsh = {
-        enable = true;
-        enableAutosuggestions = true;
-        enableCompletion = true;
-        dotDir = ".config/zsh";
-    };
+      zsh = {
+          enable = true;
+          enableAutosuggestions = true;
+          enableCompletion = true;
+          dotDir = ".config/zsh";
+          initExtra = ''
+          path+=('/home/celso/.config/emacs/bin')
+          path+=('/home/celso/.local/bin')
+          export PATH
+          '';
+      };
   };
 
   home.packages = with pkgs; [
     nixfmt
+    ripgrep
+    bat
+    fd
+    shellcheck
   ];
+
+  services = {
+    emacs = {
+      enable = true;
+      defaultEditor = true;
+      startWithUserSession = "graphical";
+      client = {
+        enable = true;
+      };
+    };
+  };
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
