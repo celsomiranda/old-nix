@@ -41,12 +41,49 @@
       home-manager.enable = true;
       neovim.enable = true;
       emacs.enable = true;
-      fzf.enable = true;
+
+      fzf = {
+        enable = true;
+        tmux.enableShellIntegration = true;
+      };
 
       git = {
           enable = true;
           userName = "Celso Miranda";
           userEmail = "769237+celsomiranda@users.noreply.github.com";
+      };
+
+      tmux = {
+        enable = true;
+        baseIndex = 1;
+        clock24 = true;
+        escapeTime = 1;
+        mouse = true;
+        keyMode = "vi";
+        newSession = true;
+        shortcut = "a";
+        extraConfig = ''
+          unbind %
+          bind | split-window -h
+
+          unbind '"'
+          bind - split-window -v
+
+          bind '-' split-window -v -c "#{pane_current_path}"
+          bind | split-window -h -c "#{pane_current_path}"
+        '';
+        plugins = with pkgs.tmuxPlugins; [
+          sensible
+          yank
+          {
+            plugin = dracula;
+            extraConfig = ''
+              set -g @dracula-show-battery false
+              set -g @dracula-show-powerline true
+              set -g @dracula-refresh-rate 10
+            '';
+          }
+        ];
       };
 
       zsh = {
@@ -68,13 +105,18 @@
     bat
     fd
     shellcheck
+    terraform
+    terraform-ls
+    ansible
+    ansible-lint
   ];
 
   services = {
     emacs = {
       enable = true;
       defaultEditor = true;
-      startWithUserSession = "graphical";
+      socketActivation.enable = true;
+      #startWithUserSession = "graphical";
       client = {
         enable = true;
       };

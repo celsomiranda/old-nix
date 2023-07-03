@@ -67,7 +67,9 @@
 
   environment.gnome.excludePackages = (with pkgs; [
     gnome-tour
+    epiphany
   ]) ++ (with pkgs.gnome; [
+    geary
     gnome-music
     totem
     tali
@@ -161,15 +163,19 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     gnomeExtensions.appindicator
-    gnomeExtensions.syncthing-icon
-    
+    gnomeExtensions.blur-my-shell
+    gnomeExtensions.just-perfection
 
     keepassxc
-    
+    brave
+    libreoffice-fresh
+
     vim
     wget
     git
-    
+   
+    nodejs_18
+ 
     maple-mono-NF
   ];
 
