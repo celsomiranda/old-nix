@@ -14,6 +14,12 @@
     # Making legacy nix commands consistent as well, awesome!
     nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
+
     settings = {
       # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
@@ -27,8 +33,16 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "omen_nixos"; # Define your hostname.
- 
+  networking = {
+    hostName = "omen_nixos";
+    extraHosts = ''
+      10.84.0.10  svcads01.iscte-iul.pt
+      10.84.0.11  svcaroot01.iscte-iul.pt
+      10.84.0.12  svcasub01.iscte-iul.pt
+    '';
+  };
+
+
   networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
   # Set your time zone.
@@ -36,10 +50,18 @@
 
   # Select internationalisation properties.
   i18n = {
-    defaultLocale = "en_US.UTF-8";
+    defaultLocale = "en_US.utf-8";
     supportedLocales = [ "pt_PT.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
     extraLocaleSettings = {
-      LC_TIME = "pt_PT.UTF-8";
+      LC_ADDRESS =        "pt_PT.utf8";
+      LC_IDENTIFICATION = "pt_PT.utf8";
+      LC_MEASUREMENT =    "pt_PT.utf8";
+      LC_MONETARY =       "pt_PT.utf8";
+      LC_NAME =           "pt_PT.utf8";
+      LC_NUMERIC =        "en_US.utf8";
+      LC_PAPER =          "pt_PT.utf8";
+      LC_TELEPHONE =      "pt_PT.utf8";
+      LC_TIME =           "pt_PT.utf8";
     };
   };
   console = {
@@ -113,6 +135,10 @@
     tailscale = {
       enable = true;
     };
+
+    globalprotect = {
+      enable = true;
+    };
   };
 
   systemd.services = {
@@ -140,8 +166,21 @@
   # services.printing.enable = true;
 
   # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -169,19 +208,23 @@
     keepassxc
     brave
     libreoffice-fresh
+    globalprotect-openconnect
 
-    vim
     wget
     git
    
     nodejs_18
- 
+
     maple-mono-NF
   ];
 
   environment.shells = with pkgs; [ zsh ];
 
   services.udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+
+  services.languagetool = {
+    enable = true;
+  };
 
   services.openssh = {
     enable = true;
@@ -227,10 +270,11 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
+  system.autoUpgrade = {
+    enable = true;
+    flake = "/etc/nixos";
+    flags = [ "--update-input" "nixpkgs" ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

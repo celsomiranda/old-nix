@@ -39,8 +39,14 @@
 
   programs = {
       home-manager.enable = true;
-      neovim.enable = true;
       emacs.enable = true;
+
+      neovim = {
+        enable = true;
+        viAlias = true;
+        vimAlias = true;
+        vimdiffAlias = true;
+      };
 
       fzf = {
         enable = true;
