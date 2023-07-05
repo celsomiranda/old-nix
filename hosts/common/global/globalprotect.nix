@@ -1,3 +1,3 @@
 {
-  programs.globalprotect.enable = true;
+  services.globalprotect.enable = true;
 }
