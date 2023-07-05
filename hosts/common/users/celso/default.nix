@@ -3,7 +3,7 @@ let ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.
 in
 {
   users.mutableUsers = false;
-  users.users.misterio = {
+  users.users.celso = {
     isNormalUser = true;
     shell = pkgs.fish;
     extraGroups = [
