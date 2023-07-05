@@ -7,6 +7,4 @@
     ./features/pass
     ./features/emacs
   ];
-
-  colorscheme = inputs.nix-colors.colorSchemes.atelier-heath;
 }
