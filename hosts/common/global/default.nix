@@ -4,7 +4,7 @@
     ./auto-upgrade.nix
     ./locale.nix
     ./nix.nix
-#    ./openssh.nix
+    ./zsh.nix
     ./optin-persistence.nix
     ./podman.nix
     ./systemd-initrd.nix
