@@ -2,7 +2,7 @@
 
 {
   imports = [
-    inputs.impermanence.nixosModules.home-manager.impermanence
+    #inputs.impermanence.nixosModules.home-manager.impermanence
     ../features/cli
     ../features/emacs
   ] ++ (builtins.attrValues outputs.homeManagerModules);
@@ -42,33 +42,33 @@
     # ADD DOOM EMACS
     sessionPath = [ "$HOME/.local/bin" "$HOME/.config/emacs/bin" ];
 
-    persistence = {
-      "/persist/home/celso" = {
-        allowOther = true;
-        directories = [
-          "Documents"
-          "Downloads"
-          "Music"
-          "Pictures"
-          "Projects"
-          "Videos"
+#    persistence = {
+#      "/persist/home/celso" = {
+#        allowOther = true;
+#        directories = [
+#          "Documents"
+#          "Downloads"
+#          "Music"
+#          "Pictures"
+#          "Projects"
+#          "Videos"
 
-          ".config/BraveSoftware"
-          ".config/emacs"
-          ".config/doom"
-          ".config/keepassxc"
-          ".config/libreoffice"
-          ".local/bin"
-          ".local/lib/node_modules"
-          ".local/share/doom"
-          ".local/share/fonts"
-        ];
-        files = [
-          ".npmrc"
-          ".zsh_history"
-          ".ansible.cfg"
-        ];
-      };
-    };
+#          ".config/BraveSoftware"
+#          ".config/emacs"
+#          ".config/doom"
+#          ".config/keepassxc"
+#          ".config/libreoffice"
+#          ".local/bin"
+#          ".local/lib/node_modules"
+#          ".local/share/doom"
+#          ".local/share/fonts"
+#        ];
+#        files = [
+#          ".npmrc"
+#          ".zsh_history"
+#          ".ansible.cfg"
+#        ];
+#      };
+#    };
   };
 }

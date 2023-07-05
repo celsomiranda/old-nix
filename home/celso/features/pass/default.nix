@@ -10,7 +10,7 @@
     storePath = "${config.home.homeDirectory}/.password-store";
   };
 
-  home.persistence = {
-    "/persist/home/celso".directories = [ ".password-store" ];
-  };
+#  home.persistence = {
+#    "/persist/home/celso".directories = [ ".password-store" ];
+#  };
 }

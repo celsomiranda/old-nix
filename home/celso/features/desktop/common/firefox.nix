@@ -24,10 +24,10 @@
 
   home = {
     sessionVariables.BROWSER = "firefox";
-    persistence = {
+  #  persistence = {
       # Not persisting is safer
-      "/persist/home/celso".directories = [ ".mozilla/firefox" ];
-    };
+  #    "/persist/home/celso".directories = [ ".mozilla/firefox" ];
+  #  };
   };
 
   xdg.mimeApps.defaultApplications = {
