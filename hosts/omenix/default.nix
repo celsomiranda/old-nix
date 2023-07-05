@@ -2,8 +2,6 @@
   imports = [
     inputs.hardware.nixosModules.omen-en00015p
 
-    ../common/optional/systemd-boot.nix
-    ../common/optional/ephemeral-btrfs.nix
     ./hardware-configuration.nix
 
     ../common/global
@@ -12,7 +10,6 @@
     ../common/optional/gnome.nix
     ../common/optional/wireless.nix
     ../common/optional/pipewire.nix
-    ../common/optional/quietboot.nix
   ];
 
   networking = {

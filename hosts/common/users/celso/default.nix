@@ -6,11 +6,13 @@ in
   users.users.celso = {
     isNormalUser = true;
     shell = pkgs.zsh;
+    group = "users";
     extraGroups = [
       "wheel"
       "video"
       "audio"
     ] ++ ifTheyExist [
+      "networkmanager"
       "network"
       "wireshark"
       "i2c"
@@ -21,7 +23,7 @@ in
       "libvirtd"
     ];
 
-    openssh.authorizedKeys.keys = [ (builtins.readFile ../../../../home/celso/ssh.pub) ];
+    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNEjRa9V1RmX55DQp/kfUd4mG5W9FTLfZR/40uDUYxm omen-laptop" ];
     passwordFile = "/persist/passwords/celso";
     packages = [ pkgs.home-manager ];
   };

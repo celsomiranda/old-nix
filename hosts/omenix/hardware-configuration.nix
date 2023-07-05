@@ -1,8 +1,4 @@
 {
-  imports = [
-    ../common/optional/ephemeral-btrfs.nix
-  ];
-
   boot = {
     initrd = {
       availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usb_storage" "sd_mod" "sdhci_pci" ];

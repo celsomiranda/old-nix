@@ -18,5 +18,9 @@
       "pt_PT.UTF-8/UTF-8"
     ];
   };
+  console = {
+    font = "Lat2-Terminus16";
+    useXkbConfig = true; # use xkbOptions in tty.
+  };
   time.timeZone = lib.mkDefault "Europe/Lisbon";
 }
