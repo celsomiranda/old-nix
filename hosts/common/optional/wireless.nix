@@ -10,7 +10,7 @@
         "/etc/NetworkManager"
         "/var/lib/NetworkManager"
       ];
-    }
-  }
+    };
+  };
 
 }
