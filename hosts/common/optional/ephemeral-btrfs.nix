@@ -32,15 +32,16 @@ in
 
     "/home" = {
       device = "/dev/disk/by-label/${hostname}";
-      fstype = "btrfs";
+      fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
+      neededForBoot = true;
     };
 
     "/var/log" = {
       device = "/dev/disk/by-label/${hostname}";
-      fstype = "btrfs";
+      fsType = "btrfs";
       options = [ "subvol=log" "compress=zstd" "noatime" ];
-      neededforboot = true;
+      neededForBoot = true;
     };
   };
 }

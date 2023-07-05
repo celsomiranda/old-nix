@@ -5,7 +5,7 @@ in
   users.mutableUsers = false;
   users.users.celso = {
     isNormalUser = true;
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     extraGroups = [
       "wheel"
       "video"
