@@ -1,6 +1,6 @@
 { pkgs, inputs, ... }: {
   imports = [
-    inputs.hardware.nixosModules.omen-en00015sp
+    inputs.hardware.nixosModules.omen-en00015p
 
     ./hardware-configuration.nix
 
