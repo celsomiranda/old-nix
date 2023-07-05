@@ -10,7 +10,6 @@
     ../common/users/celso
 
     ../common/optional/pipewire.nix
-    ../common/optional/quietboot.nix
   ];
 
   networking = {
