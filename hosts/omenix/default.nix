@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }: {
+{ pkgs, inputs, lib, ... }: {
   imports = [
     inputs.hardware.nixosModules.omen-en00015p
 
@@ -14,7 +14,7 @@
 
   networking = {
     hostName = "omenix";
-    useDHCP = true;
+    useDHCP = lib.mkDefault true;
   };
 
   boot = {
