@@ -2,7 +2,7 @@
   imports = [
     inputs.hardware.nixosModules.omen-en00015p
 
-    ./common/optional/systemd-boot.nix
+    ../common/optional/systemd-boot.nix
     ./hardware-configuration.nix
 
     ../common/global
