@@ -5,12 +5,10 @@
   ];
   networking.networkmanager.enable = true;
   environment.persistence = {
-    "/persist" = {
-      directories = [
-        "/etc/NetworkManager"
-        "/var/lib/NetworkManager"
-      ];
-    };
+    "/persist".directories = [
+      "/etc/NetworkManager"
+      "/var/lib/NetworkManager"
+    ];
   };
 
 }
