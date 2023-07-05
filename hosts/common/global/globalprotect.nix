@@ -1,0 +1,3 @@
+{
+  programs.globalprotect.enable = true;
+}
