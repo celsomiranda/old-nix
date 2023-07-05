@@ -3,7 +3,6 @@
 { lib, config, ... }:
 let
   hostname = config.networking.hostName;
-  phase1Systemd = config.boot.initrd.systemd.enable;
 in
 {
   boot.initrd = {
@@ -34,7 +33,6 @@ in
       device = "/dev/disk/by-label/${hostname}";
       fsType = "btrfs";
       options = [ "subvol=home" "compress=zstd" "noatime" ];
-      neededForBoot = true;
     };
   };
 }

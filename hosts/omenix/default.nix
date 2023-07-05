@@ -14,6 +14,7 @@
 
   networking = {
     hostName = "omenix";
+    useDHCP = true;
   };
 
   boot = {
@@ -29,11 +30,6 @@
   services.logind = {
     lidSwitch = "suspend";
     lidSwitchExternalPower = "lock";
-  };
-
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
   };
 
   system.stateVersion = "23.05";

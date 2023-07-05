@@ -15,10 +15,6 @@
   networking = {
     hostName = "PC012367";
     useDHCP = true;
-    # TODO ?
-    interfaces.enp8s0 = {
-      useDHCP = true;
-    };
   };
 
   boot = {

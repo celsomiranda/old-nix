@@ -3,10 +3,12 @@
     xserver = {
       desktopManager.gnome = {
         enable = true;
-	      };
-      displayManager.gdm = {
-        enable = true;
-        autoSuspend = false;
+      };
+      displayManager = {
+        gdm = {
+          enable = true;
+          autoSuspend = false;
+        };
         autoLogin = {
           enable = true;
           user = "celso";
