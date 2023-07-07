@@ -1,6 +1,6 @@
 { pkgs, lib, outputs, ... }:
 {
   imports = [
-    ./firefox.nix
+    ./qt.nix
   ];
 }
