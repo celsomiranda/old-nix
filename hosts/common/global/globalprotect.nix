@@ -1,0 +1,3 @@
+{
+  services.globalprotect.enable = true;
+}
