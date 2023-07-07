@@ -11,8 +11,7 @@ in
       "video"
       "audio"
     ] ++ ifTheyExist [
-      "minecraft"
-      "network"
+      "networkmanager"
       "wireshark"
       "i2c"
       "mysql"
@@ -20,7 +19,6 @@ in
       "podman"
       "git"
       "libvirtd"
-      "deluge"
     ];
 
     openssh.authorizedKeys.keys = [ (builtins.readFile ../../../../home/cjcma/ssh.pub) ];
