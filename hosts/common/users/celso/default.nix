@@ -3,7 +3,7 @@ let ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.
 in
 {
   users.mutableUsers = false;
-  users.users.celso = {
+  users.users.cjcma = {
     isNormalUser = true;
     shell = pkgs.fish;
     extraGroups = [
@@ -23,16 +23,16 @@ in
       "deluge"
     ];
 
-    openssh.authorizedKeys.keys = [ (builtins.readFile ../../../../home/celso/ssh.pub) ];
-    passwordFile = config.sops.secrets.celso-password.path;
+    openssh.authorizedKeys.keys = [ (builtins.readFile ../../../../home/cjcma/ssh.pub) ];
+    passwordFile = config.sops.secrets.cjcma-password.path;
     packages = [ pkgs.home-manager ];
   };
 
-  sops.secrets.celso-password = {
+  sops.secrets.cjcma-password = {
     sopsFile = ../../secrets.yaml;
     neededForUsers = true;
   };
 
-  home-manager.users.celso = import ../../../../home/celso/${config.networking.hostName}.nix;
+  home-manager.users.cjcma = import ../../../../home/cjcma/${config.networking.hostName}.nix;
 
 }

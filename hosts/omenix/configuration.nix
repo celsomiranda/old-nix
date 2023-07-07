@@ -82,7 +82,7 @@
     gdm.enable = true;
     autoLogin = {
       enable = true;
-      user = "celso";
+      user = "cjcma";
     };
   };
   services.xserver.desktopManager.gnome.enable = true;
@@ -104,9 +104,9 @@
   services = {
     syncthing = {
       enable = true;
-      user = "celso";
-      dataDir = "/home/celso/Documents";
-      configDir = "/home/celso/.config/syncthing";
+      user = "cjcma";
+      dataDir = "/home/cjcma/Documents";
+      configDir = "/home/cjcma/.config/syncthing";
       overrideDevices = true;
       overrideFolders = true;
       devices = {
@@ -118,15 +118,15 @@
       folders = {
         "books" = {
           id = "75nkg-4joak";
-          path = "/home/celso/Documents/books";
+          path = "/home/cjcma/Documents/books";
           devices = [ "Home NAS" ];
         };
         "keepassxc" = {
-          path = "/home/celso/Documents/keepass";
+          path = "/home/cjcma/Documents/keepass";
           devices = [ "Home NAS" "Huawei Mate20 Pro" "Huawei MediaPad" "ISCTE" ];
         };
         "obsidian" = {
-          path = "/home/celso/Documents/obsidian";
+          path = "/home/cjcma/Documents/obsidian";
           devices = [ "Home NAS" "Huawei Mate20 Pro" "Huawei MediaPad" "ISCTE" ];
         };
       };
@@ -187,14 +187,14 @@
   users = {
     defaultUserShell = pkgs.zsh;
     mutableUsers = false;
-    users.celso = {
+    users.cjcma = {
       description = "Celso Miranda";
       useDefaultShell = true;
       isNormalUser = true;
       group = "users";
       extraGroups = [ "wheel" "networkmanager" ];
       openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJNEjRa9V1RmX55DQp/kfUd4mG5W9FTLfZR/40uDUYxm omen-laptop" ];
-      passwordFile = "/persist/passwords/celso";
+      passwordFile = "/persist/passwords/cjcma";
     };
   };
 
