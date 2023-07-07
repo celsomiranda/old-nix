@@ -12,7 +12,7 @@
 
   networking = {
     hostName = "omenix";
-    useDHCP = true;
+   # useDHCP = true;
   };
 
   boot = {
