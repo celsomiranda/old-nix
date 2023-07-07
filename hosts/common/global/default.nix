@@ -14,7 +14,7 @@
     ./systemd-boot.nix
     ./tailscale.nix
     ./globalprotect.nix
-  ] ++ (builtins.attrValues outputs.nixosModules);
+  ];
 
   home-manager.extraSpecialArgs = { inherit inputs outputs; };
 
