@@ -13,7 +13,6 @@
       directories = [
         "/var/lib/systemd"
         "/var/lib/nixos"
-        "/var/log"
       ];
       files = [
         "/etc/machine-id"

@@ -9,7 +9,7 @@
 
     ../common/optional/power-management.nix
   ];
-
+  nixpkgs.config.allowUnfree = true;
   networking = {
     hostName = "omenix";
    # useDHCP = true;
