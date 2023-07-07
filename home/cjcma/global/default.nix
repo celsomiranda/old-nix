@@ -2,7 +2,6 @@
 {
   imports = [
     ../features/cli
-    ../features/nvim
   ];
 
   nixpkgs = {
