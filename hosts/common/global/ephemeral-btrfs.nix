@@ -29,6 +29,13 @@ in
       neededForBoot = true;
     };
 
+    "/var/log" = {
+      device = "/dev/disk/by-label/${hostname}";
+      fsType = "btrfs";
+      options = [ "subvol=log" "compress=zstd" ];
+      neededForBoot = true;
+    };
+
     "/home" = {
       device = "/dev/disk/by-label/${hostname}";
       fsType = "btrfs";
