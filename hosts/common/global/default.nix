@@ -10,6 +10,7 @@
     ./zsh.nix
     ./optin-persistence.nix
     ./podman.nix
+    ./pipewire.nix
     ./systemd-boot.nix
     ./tailscale.nix
     ./globalprotect.nix
