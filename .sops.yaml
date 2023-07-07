@@ -1,0 +1,15 @@
+keys:
+  - &users:
+    - &cjcma age1c7n9jcsqf4xrg2c9czu5zclg35zp9enxxdjakypmpqryy64fpcrqq4n2uv
+
+  - &hosts:
+    - &omenix age1lqkq600e2ls2xfql9e6uu6anl02grfr7twsayv2ejwgcrryddcsq3wxhtl
+    - &isctex 
+
+creation_rules:
+  - path_regex: hosts/common/secrets.ya?ml$
+    key_groups:
+      - age:
+        - *omenix
+        - *isctex
+        - *cjcma
