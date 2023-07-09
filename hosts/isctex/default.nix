@@ -7,7 +7,7 @@
     ./hardware-configuration.nix
 
     ../common/global
-    ../common/users/cjcma
+    ../common/users/celso
   ];
 
   networking = {

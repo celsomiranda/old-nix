@@ -48,17 +48,17 @@
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "cjcma@omenix" = home-manager.lib.homeManagerConfiguration {
+      "celso@omenix" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = { inherit inputs outputs; }; # Pass flake inputs to our config
         # > Our main home-manager configuration file <
-        modules = [ ./home/cjcma/omenix.nix ];
+        modules = [ ./home/celso/omenix.nix ];
       };
-      "cjcma@isctex" = home-manager.lib.homeManagerConfiguration {
+      "celso@isctex" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = { inherit inputs; }; # Pass flake inputs to our config
         # > Our main home-manager configuration file <
-        modules = [ ./home/cjcma/isctex.nix ];
+        modules = [ ./home/celso/isctex.nix ];
       };
     };
   };
